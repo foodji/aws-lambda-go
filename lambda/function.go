@@ -31,9 +31,12 @@ func (fn *Function) Ping(req *messages.PingRequest, response *messages.PingRespo
 
 // Invoke method try to perform a command given an InvokeRequest and an InvokeResponse
 func (fn *Function) Invoke(req *messages.InvokeRequest, response *messages.InvokeResponse) error {
+	canRecover := true
 	defer func() {
-		if err := recover(); err != nil {
-			response.Error = lambdaPanicResponse(err)
+		if canRecover {
+			if err := recover(); err != nil {
+				response.Error = lambdaPanicResponse(err)
+			}
 		}
 	}()
 
@@ -63,6 +66,8 @@ func (fn *Function) Invoke(req *messages.InvokeRequest, response *messages.Invok
 
 	payload, err := fn.handler.Invoke(invokeContext, req.Payload)
 	if err == LambdaShutdownRequest {
+		canRecover = false
+		panic(err)
 		return err
 	}
 	if err != nil {

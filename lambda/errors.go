@@ -20,9 +20,11 @@ func getErrorType(err interface{}) string {
 }
 
 func lambdaErrorResponse(invokeError error) *messages.InvokeResponse_Error {
+	/*
 	if ive, ok := invokeError.(messages.InvokeResponse_Error); ok {
 		return &ive
 	}
+	 */
 	var errorName string
 	if errorType := reflect.TypeOf(invokeError); errorType.Kind() == reflect.Ptr {
 		errorName = errorType.Elem().Name()
