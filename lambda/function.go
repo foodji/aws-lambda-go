@@ -62,6 +62,9 @@ func (fn *Function) Invoke(req *messages.InvokeRequest, response *messages.Invok
 	os.Setenv("_X_AMZN_TRACE_ID", req.XAmznTraceId)
 
 	payload, err := fn.handler.Invoke(invokeContext, req.Payload)
+	if err == LambdaShutdownRequest {
+		return err
+	}
 	if err != nil {
 		response.Error = lambdaErrorResponse(err)
 		return nil

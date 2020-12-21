@@ -3,10 +3,13 @@
 package lambda
 
 import (
+	"errors"
 	"reflect"
 
 	"github.com/aws/aws-lambda-go/lambda/messages"
 )
+
+var LambdaShutdownRequest error = errors.New("Lambda Shutdown Request")
 
 func getErrorType(err interface{}) string {
 	errorType := reflect.TypeOf(err)

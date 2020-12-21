@@ -1,4 +1,4 @@
-module github.com/aws/aws-lambda-go
+module github.com/Foodji/aws-lambda-go
 
 go 1.12
 
